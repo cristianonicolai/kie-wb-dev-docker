@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.kie.docker</groupId>
+  <artifactId>kie-wb-dev-docker</artifactId>
+  <version>7.0.0-SNAPSHOT</version>
+  <packaging>docker-build</packaging>
+
+  <name>Docker image for kie-wb development</name>
+
+  <properties>
+    <wildfly.version>10.1.0.Final</wildfly.version>
+    <docker.follow>true</docker.follow>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.kie</groupId>
+      <artifactId>kie-wb</artifactId>
+      <type>war</type>
+      <classifier>wildfly10</classifier>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jbpm</groupId>
+      <artifactId>jbpm-wb-case-mgmt-showcase</artifactId>
+      <type>war</type>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.server</groupId>
+      <artifactId>kie-server</artifactId>
+      <type>war</type>
+      <classifier>ee7</classifier>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>io.fabric8</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>0.20.0</version>
+        <extensions>true</extensions>
+        <configuration>
+          <images>
+            <image>
+              <name>jboss/kie-wb-dev-docker:${project.version}</name>
+              <build>
+                <from>jboss/wildfly:${wildfly.version}</from>
+                <ports>
+                  <port>8080</port>
+                </ports>
+                <cmd>
+                  <exec>
+                    <arg>/opt/jboss/wildfly/bin/standalone.sh</arg>
+                    <arg>-b</arg>
+                    <arg>0.0.0.0</arg>
+                    <arg>-c</arg>
+                    <arg>standalone-full-kie.xml</arg>
+                  </exec>
+                </cmd>
+                <runCmds>
+                  <run>/opt/jboss/wildfly/bin/add-user.sh -u admin -p admin -s</run>
+                  <run>/opt/jboss/wildfly/bin/add-user.sh -u admin -p admin -g kie-server,user -a -s</run>
+                  <run>/opt/jboss/wildfly/bin/add-user.sh -u user -p user -g kie-server,user -a -s</run>
+                  <run>/opt/jboss/wildfly/bin/add-user.sh -u kieserver -p kieserver1! -g kie-server -a -s</run>
+                  <run>ln -s /maven/kie-wb.war /opt/jboss/wildfly/standalone/deployments/kie-wb.war</run>
+                  <run>ln -s /maven/kie-server.war /opt/jboss/wildfly/standalone/deployments/kie-server.war</run>
+                  <run>ln -s /maven/jbpm-cm.war /opt/jboss/wildfly/standalone/deployments/jbpm-cm.war</run>
+                  <run>mkdir $HOME/.m2</run>
+                  <run>ln -s /maven/settings.xml $HOME/.m2/settings.xml</run>
+                  <run>ln -s /maven/standalone-full-kie.xml /opt/jboss/wildfly/standalone/configuration/standalone-full-kie.xml</run>
+                </runCmds>
+                <assembly>
+                  <inline>
+                    <dependencySets>
+                      <dependencySet>
+                        <includes>
+                          <include>org.kie:kie-wb:war:wildfly10</include>
+                        </includes>
+                        <outputFileNameMapping>kie-wb.war</outputFileNameMapping>
+                      </dependencySet>
+                      <dependencySet>
+                        <includes>
+                          <include>org.jbpm:jbpm-wb-case-mgmt-showcase:war</include>
+                        </includes>
+                        <outputFileNameMapping>jbpm-cm.war</outputFileNameMapping>
+                      </dependencySet>
+                      <dependencySet>
+                        <includes>
+                          <include>org.kie.server:kie-server:war:ee7</include>
+                        </includes>
+                        <outputFileNameMapping>kie-server.war</outputFileNameMapping>
+                      </dependencySet>
+                    </dependencySets>
+                    <fileSets>
+                      <fileSet>
+                        <directory>src/main/resources</directory>
+                        <outputDirectory>.</outputDirectory>
+                      </fileSet>
+                    </fileSets>
+                  </inline>
+                  <user>jboss:jboss:jboss</user>
+                </assembly>
+              </build>
+              <run>
+                <ports>
+                  <port>wildfly.port:8080</port>
+                </ports>
+                <log>
+                  <enabled>true</enabled>
+                </log>
+                <env>
+                  <JAVA_OPTS>-Xms1024m -Xmx2048m -XX:MetaspaceSize=128M -XX:MaxMetaspaceSize=512m</JAVA_OPTS>
+                  <M2_HOME>$HOME/.m2</M2_HOME>
+                </env>
+                <wait>
+                  <http>
+                    <url>http://localhost:${wildfly.port}/kie-wb/kie-wb.jsp</url>
+                    <method>GET</method>
+                    <status>200</status>
+                  </http>
+                  <time>80000</time>
+                </wait>
+              </run>
+            </image>
+          </images>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
