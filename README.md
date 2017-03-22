@@ -1,9 +1,10 @@
-# KIE Workenbench Devleopment Docker Image
+# KIE Workbench Development Docker Image
 
-## Demo Docker image
+## Docker image
 
 To allow you to quickly get started with the Kie Workbench fully integrated with a running Kie Server, a Docker image is generated as part of the build.
-This image contains both applications deployed to a single WildFly 10 instance. It also provides all the necessary settings to retrieve the necessary data from the running Kie Server instance.
+This image contains all three applications (Kie Workbench, Kie Server and Case Management Showcase) deployed to a single WildFly 10 instance.
+It also provides all the necessary settings to retrieve the necessary data from the running Kie Server instance.
 A set of pre-defined users is provided with the following credentials: admin/admin and user/user.
 Please note, that you need [Docker](https://www.docker.io/) installed in your system to successfully build the demo image.
 For more info regarding how to use the docker-maven-plugin, check the GitHub [documentation](https://github.com/fabric8io/docker-maven-plugin) and [User Manual](https://dmp.fabric8.io/)
