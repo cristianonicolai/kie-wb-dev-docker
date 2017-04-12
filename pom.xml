@@ -27,6 +27,7 @@
     <dependency>
       <groupId>org.jbpm</groupId>
       <artifactId>jbpm-wb-case-mgmt-showcase</artifactId>
+      <classifier>wildfly10</classifier>
       <type>war</type>
       <version>${project.version}</version>
     </dependency>
@@ -87,7 +88,7 @@
                       </dependencySet>
                       <dependencySet>
                         <includes>
-                          <include>org.jbpm:jbpm-wb-case-mgmt-showcase:war</include>
+                          <include>org.jbpm:jbpm-wb-case-mgmt-showcase:war:wildfly10</include>
                         </includes>
                         <outputFileNameMapping>jbpm-cm.war</outputFileNameMapping>
                       </dependencySet>
