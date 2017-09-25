@@ -6,7 +6,7 @@
 
   <groupId>org.kie.docker</groupId>
   <artifactId>kie-wb-dev-docker</artifactId>
-  <version>7.1.0-SNAPSHOT</version>
+  <version>7.3.1-SNAPSHOT</version>
   <packaging>docker-build</packaging>
 
   <name>Docker image for kie-wb development</name>
@@ -63,12 +63,13 @@
                     <arg>0.0.0.0</arg>
                     <arg>-c</arg>
                     <arg>standalone-full-kie.xml</arg>
+                    <arg>-Dorg.jbpm.ht.admin.user=wbadmin</arg>
                   </exec>
                 </cmd>
                 <runCmds>
                   <run>/opt/jboss/wildfly/bin/add-user.sh -u admin -p admin -s</run>
-                  <run>/opt/jboss/wildfly/bin/add-user.sh -u admin -p admin -g kie-server,user -a -s</run>
-                  <run>/opt/jboss/wildfly/bin/add-user.sh -u user -p user -g kie-server,user -a -s</run>
+                  <run>/opt/jboss/wildfly/bin/add-user.sh -u wbadmin -p wbadmin -g kie-server,user,admin,process-admin -a -s</run>
+                  <run>/opt/jboss/wildfly/bin/add-user.sh -u wbuser -p wbuser -g kie-server,user -a -s</run>
                   <run>/opt/jboss/wildfly/bin/add-user.sh -u kieserver -p kieserver1! -g kie-server -a -s</run>
                   <run>ln -s /maven/kie-wb.war /opt/jboss/wildfly/standalone/deployments/kie-wb.war</run>
                   <run>ln -s /maven/kie-server.war /opt/jboss/wildfly/standalone/deployments/kie-server.war</run>
@@ -126,7 +127,7 @@
                     <method>GET</method>
                     <status>200</status>
                   </http>
-                  <time>100000</time>
+                  <time>1000000</time>
                 </wait>
               </run>
             </image>
