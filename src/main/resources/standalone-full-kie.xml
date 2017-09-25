@@ -129,6 +129,9 @@
             <logger category="org.drools">
                 <level name="DEBUG"/>
             </logger>
+            <logger category="org.dashbuilder">
+                <level name="DEBUG"/>
+            </logger>
             <root-logger>
                 <level name="INFO"/>
                 <handlers>
