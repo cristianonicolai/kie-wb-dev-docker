@@ -12,7 +12,7 @@
   <name>Docker image for kie-wb development</name>
 
   <properties>
-    <wildfly.version>10.1.0.Final</wildfly.version>
+    <wildfly.version>11.0.0.Final</wildfly.version>
     <docker.follow>true</docker.follow>
   </properties>
 
