@@ -6,12 +6,13 @@
 
   <groupId>org.kie.docker</groupId>
   <artifactId>kie-wb-dev-docker</artifactId>
-  <version>7.6.0-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>docker-build</packaging>
 
   <name>Docker image for kie-wb development</name>
 
   <properties>
+    <kie.version>7.7.0-SNAPSHOT</kie.version>
     <wildfly.version>11.0.0.Final</wildfly.version>
     <docker.follow>true</docker.follow>
   </properties>
@@ -21,22 +22,22 @@
       <groupId>org.kie</groupId>
       <artifactId>kie-wb</artifactId>
       <type>war</type>
-      <classifier>wildfly10</classifier>
-      <version>${project.version}</version>
+      <classifier>wildfly11</classifier>
+      <version>${kie.version}</version>
     </dependency>
     <dependency>
       <groupId>org.jbpm</groupId>
       <artifactId>jbpm-wb-case-mgmt-showcase</artifactId>
       <classifier>wildfly10</classifier>
       <type>war</type>
-      <version>${project.version}</version>
+      <version>${kie.version}</version>
     </dependency>
     <dependency>
       <groupId>org.kie.server</groupId>
       <artifactId>kie-server</artifactId>
       <type>war</type>
       <classifier>ee7</classifier>
-      <version>${project.version}</version>
+      <version>${kie.version}</version>
     </dependency>
   </dependencies>
 
@@ -50,7 +51,7 @@
         <configuration>
           <images>
             <image>
-              <name>jboss/kie-wb-dev-docker:${project.version}</name>
+              <name>jboss/kie-wb-dev-docker:${kie.version}</name>
               <build>
                 <from>jboss/wildfly:${wildfly.version}</from>
                 <ports>
@@ -83,7 +84,7 @@
                     <dependencySets>
                       <dependencySet>
                         <includes>
-                          <include>org.kie:kie-wb:war:wildfly10</include>
+                          <include>org.kie:kie-wb:war:wildfly11</include>
                         </includes>
                         <outputFileNameMapping>kie-wb.war</outputFileNameMapping>
                       </dependencySet>
