@@ -65,6 +65,7 @@
                     <arg>-c</arg>
                     <arg>standalone-full-kie.xml</arg>
                     <arg>-Dorg.jbpm.ht.admin.user=wbadmin</arg>
+                    <arg>-Djava.net.preferIPv4Stack=true</arg>
                   </exec>
                 </cmd>
                 <runCmds>
