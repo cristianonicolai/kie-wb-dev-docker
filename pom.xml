@@ -12,7 +12,7 @@
   <name>Docker image for kie-wb development</name>
 
   <properties>
-    <kie.version>7.7.1-SNAPSHOT</kie.version>
+    <kie.version>7.10.0-SNAPSHOT</kie.version>
     <wildfly.version>11.0.0.Final</wildfly.version>
     <docker.follow>true</docker.follow>
   </properties>
@@ -64,14 +64,14 @@
                     <arg>0.0.0.0</arg>
                     <arg>-c</arg>
                     <arg>standalone-full-kie.xml</arg>
-                    <arg>-Dorg.jbpm.ht.admin.user=wbadmin</arg>
+                    <arg>-Dorg.jbpm.ht.admin.group=admin</arg>
                     <arg>-Djava.net.preferIPv4Stack=true</arg>
                   </exec>
                 </cmd>
                 <runCmds>
                   <run>/opt/jboss/wildfly/bin/add-user.sh -u admin -p admin -s</run>
                   <run>/opt/jboss/wildfly/bin/add-user.sh -u wbadmin -p wbadmin -g kie-server,user,admin,process-admin -a -s</run>
-                  <run>/opt/jboss/wildfly/bin/add-user.sh -u wbuser -p wbuser -g kie-server,user -a -s</run>
+                  <run>/opt/jboss/wildfly/bin/add-user.sh -u wbuser -p wbuser -g kie-server,user,admin,process-admin -a -s</run>
                   <run>/opt/jboss/wildfly/bin/add-user.sh -u kieserver -p kieserver1! -g kie-server -a -s</run>
                   <run>ln -s /maven/kie-wb.war /opt/jboss/wildfly/standalone/deployments/kie-wb.war</run>
                   <run>ln -s /maven/kie-server.war /opt/jboss/wildfly/standalone/deployments/kie-server.war</run>
